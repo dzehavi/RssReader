@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -44,6 +45,8 @@ public class RssFragment extends Fragment implements RssFeedFetchTask.OnRssFeedF
     TableLayout businessTable;
     TableLayout entEnvTable;
 
+    ProgressBar loadingIndicator;
+
     // prevents displaying the same item twice
     HashSet<String> shownFeedItems = new HashSet<>();
 
@@ -64,11 +67,12 @@ public class RssFragment extends Fragment implements RssFeedFetchTask.OnRssFeedF
         View rssFragmentView = inflater.inflate(R.layout.fragment_rss, container, false);
         businessTable = rssFragmentView.findViewById(R.id.business_table);
         entEnvTable = rssFragmentView.findViewById(R.id.ent_env_table);
-
+        loadingIndicator = rssFragmentView.findViewById(R.id.indeterminateBar);
         return rssFragmentView;
     }
 
     int lastEntertainmentIndex = 0;
+    HashSet<String> fetchedFeeds = new HashSet<>(3);
     // callback from the RSS fetch AsyncTask
     @Override
     public void onFeedFetched(RssFeedFetchResponse response) {
@@ -77,7 +81,7 @@ public class RssFragment extends Fragment implements RssFeedFetchTask.OnRssFeedF
                 for (RssFeedItem rssFeedItem: response.items) {
                     TableRow newRow = createRssFeedItemView(rssFeedItem);
                     if (newRow == null)
-                        return;
+                        continue;
                     businessTable.addView(newRow);
                 }
                 break;
@@ -85,7 +89,7 @@ public class RssFragment extends Fragment implements RssFeedFetchTask.OnRssFeedF
                 for (RssFeedItem rssFeedItem: response.items) {
                     TableRow newRow = createRssFeedItemView(rssFeedItem);
                     if (newRow == null)
-                        return;
+                        continue;
                     entEnvTable.addView(newRow);
                     // this is a bookmark for where the first environment item will be
                     lastEntertainmentIndex++;
@@ -95,12 +99,25 @@ public class RssFragment extends Fragment implements RssFeedFetchTask.OnRssFeedF
                 for (RssFeedItem rssFeedItem: response.items) {
                     TableRow newRow = createRssFeedItemView(rssFeedItem);
                     if (newRow == null)
-                        return;
+                        continue;
                     // add new environment items after the last entertainment item
                     entEnvTable.addView(newRow, lastEntertainmentIndex);
                 }
                 break;
         };
+
+        // check if we got all 3, then turn off progress indicator
+        fetchedFeeds.add(response.link);
+        if (fetchedFeeds.size() == 3) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (loadingIndicator != null)
+                        loadingIndicator.setVisibility(View.GONE);
+                }
+            });
+            fetchedFeeds.clear();
+        }
     }
 
     @Nullable
@@ -184,6 +201,13 @@ public class RssFragment extends Fragment implements RssFeedFetchTask.OnRssFeedF
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (loadingIndicator != null)
+                            loadingIndicator.setVisibility(View.VISIBLE);
+                    }
+                });
                 new RssFeedFetchTask(BUSINESS_LINK, RssFragment.this) .execute();
                 new RssFeedFetchTask(ENTERTAINMENT_LINK, RssFragment.this).execute();
                 new RssFeedFetchTask(ENVIRONMENT_LINK, RssFragment.this) .execute();
