@@ -7,6 +7,15 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="#FF909090"
+        android:gravity="center"
+        android:text="Business"
+        android:textColor="#FFFFFFFF"
+        android:textSize="20dp" />
+
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -20,10 +29,14 @@
         </TableLayout>
     </ScrollView>
 
-    <View
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="2dip"
-        android:background="#FF909090" />
+        android:layout_height="30dp"
+        android:background="#FF909090"
+        android:gravity="center"
+        android:text="Entertaiment / Environment"
+        android:textColor="#FFFFFFFF"
+        android:textSize="20dp" />
 
     <ScrollView
         android:layout_width="fill_parent"
