@@ -1,5 +1,8 @@
 package dzehavi.com.rssreader;
 
+/**
+ * represent a single RSS feed item.
+ */
 public class RssFeedItem {
     private String title;
     private String link;

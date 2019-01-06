@@ -2,6 +2,9 @@ package dzehavi.com.rssreader;
 
 import java.util.List;
 
+/**
+ * encapsulates the data that is received from fetching an RSS feed.
+ */
 class RssFeedFetchResponse {
 
     final String title;

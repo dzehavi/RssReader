@@ -15,7 +15,7 @@ import java.util.TimerTask;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * A simple {@link Fragment} subclass, that shows author's name, current date and time, and title of selected feed.
  */
 public class InfoFragment extends Fragment {
 
@@ -29,17 +29,18 @@ public class InfoFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_info, container, false);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+		// listen for new RSS feed selection, the title of the feed will be passed from MainActivity
         ((MainActivity)getActivity()).setFeedTitleListener(
                 new MainActivity.OnFeedTitleListener() {
             @Override
             public void onFeedTitle(String feedDescription) {
+				// update feed title text view
                 TextView viewById = getView().findViewById(R.id.selectedFeedTextView);
                 if(viewById != null)
                     viewById.setText(feedDescription);
@@ -79,6 +80,9 @@ public class InfoFragment extends Fragment {
         timer = null;
     }
 
+	/**
+	* format current date and time and show inside date&time text view
+	*/
     private void updateDateAndTime() {
         getActivity().runOnUiThread(new Runnable() {
             @Override

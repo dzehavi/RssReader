@@ -63,7 +63,6 @@ public class RssFragment extends Fragment implements RssFeedFetchTask.OnRssFeedF
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View rssFragmentView = inflater.inflate(R.layout.fragment_rss, container, false);
         businessTable = rssFragmentView.findViewById(R.id.business_table);
         entEnvTable = rssFragmentView.findViewById(R.id.ent_env_table);
@@ -73,7 +72,9 @@ public class RssFragment extends Fragment implements RssFeedFetchTask.OnRssFeedF
 
     int lastEntertainmentIndex = 0;
     HashSet<String> fetchedFeeds = new HashSet<>(3);
-    // callback from the RSS fetch AsyncTask
+    /** 
+	 * callback from the RSS fetch AsyncTask
+	 */
     @Override
     public void onFeedFetched(RssFeedFetchResponse response) {
         switch(response.link) {
@@ -106,13 +107,16 @@ public class RssFragment extends Fragment implements RssFeedFetchTask.OnRssFeedF
                 break;
         };
 
-        // check if we got all 3, then turn off progress indicator
+		// 3 RSS feed fetch AsyncTasks are being started in parallel. 
+		// We wait for the last one to finish before turning off the progress indicator.
         fetchedFeeds.add(response.link);
+        // check if we got all 3, then turn off progress indicator
         if (fetchedFeeds.size() == 3) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     if (loadingIndicator != null)
+						// take off the spinning progress bar
                         loadingIndicator.setVisibility(View.GONE);
                 }
             });
@@ -165,7 +169,7 @@ public class RssFragment extends Fragment implements RssFeedFetchTask.OnRssFeedF
                 Toast.LENGTH_LONG).show();
     }
 
-    // the main activity wants to know when a feed is selected
+    // the main activity, actually the InfoFragment, wants to know when a feed is selected
     public interface OnFragmentInteractionListener {
         void onFeedSelected(String selectedRssFeedTitle);
     }
@@ -197,6 +201,7 @@ public class RssFragment extends Fragment implements RssFeedFetchTask.OnRssFeedF
         if(timer != null) {
             return;
         }
+		// fetch RSS feeds every 5 seconds
         timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -204,10 +209,12 @@ public class RssFragment extends Fragment implements RssFeedFetchTask.OnRssFeedF
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+						// show a spinning progress bar
                         if (loadingIndicator != null)
                             loadingIndicator.setVisibility(View.VISIBLE);
                     }
                 });
+				// fire 3 Feed fetch request simultanously
                 new RssFeedFetchTask(BUSINESS_LINK, RssFragment.this) .execute();
                 new RssFeedFetchTask(ENTERTAINMENT_LINK, RssFragment.this).execute();
                 new RssFeedFetchTask(ENVIRONMENT_LINK, RssFragment.this) .execute();

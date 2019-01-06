@@ -16,16 +16,12 @@ public class MainActivity extends AppCompatActivity implements RssFragment.OnFra
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
+     * fragments for each of the tabs. 
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
     /**
-     * The {@link ViewPager} that will host the section contents.
+     * The {@link ViewPager} that will host the tab contents.
      */
     private ViewPager mViewPager;
 
@@ -36,8 +32,7 @@ public class MainActivity extends AppCompatActivity implements RssFragment.OnFra
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
+        // Create the adapter that will return a fragment for each of the two tabs
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
@@ -54,19 +49,15 @@ public class MainActivity extends AppCompatActivity implements RssFragment.OnFra
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+        // Handle action bar item clicks here. 
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
@@ -76,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements RssFragment.OnFra
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
+     * one of the tabs.
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
@@ -103,6 +94,11 @@ public class MainActivity extends AppCompatActivity implements RssFragment.OnFra
         }
     }
 
+	/**
+	 * update InfoFragment with the title of the selected feed in RssFragment
+	 * inter-fragment communication is done through the parent activity
+	 * @param selectedFeedTitle the title of the feed that was elected in RssFragment
+	 */
     @Override
     public void onFeedSelected(String selectedFeedTitle) {
         mListener.onFeedTitle(selectedFeedTitle);
