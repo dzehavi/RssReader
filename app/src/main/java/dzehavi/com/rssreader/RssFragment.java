@@ -80,7 +80,7 @@ public class RssFragment extends Fragment implements RssFeedFetchTask.OnRssFeedF
         switch(response.link) {
             case BUSINESS_LINK:
                 for (RssFeedItem rssFeedItem: response.items) {
-                    TableRow newRow = createRssFeedItemView(rssFeedItem);
+                    TableRow newRow = createRssFeedItemTableRow(rssFeedItem);
                     if (newRow == null)
                         continue;
                     businessTable.addView(newRow);
@@ -88,7 +88,7 @@ public class RssFragment extends Fragment implements RssFeedFetchTask.OnRssFeedF
                 break;
             case ENTERTAINMENT_LINK:
                 for (RssFeedItem rssFeedItem: response.items) {
-                    TableRow newRow = createRssFeedItemView(rssFeedItem);
+                    TableRow newRow = createRssFeedItemTableRow(rssFeedItem);
                     if (newRow == null)
                         continue;
                     entEnvTable.addView(newRow);
@@ -98,7 +98,7 @@ public class RssFragment extends Fragment implements RssFeedFetchTask.OnRssFeedF
                 break;
             case ENVIRONMENT_LINK:
                 for (RssFeedItem rssFeedItem: response.items) {
-                    TableRow newRow = createRssFeedItemView(rssFeedItem);
+                    TableRow newRow = createRssFeedItemTableRow(rssFeedItem);
                     if (newRow == null)
                         continue;
                     // add new environment items after the last entertainment item
@@ -107,7 +107,7 @@ public class RssFragment extends Fragment implements RssFeedFetchTask.OnRssFeedF
                 break;
         };
 
-		// 3 RSS feed fetch AsyncTasks are being started in parallel. 
+		// 3 fetch AsyncTasks are being started in parallel.
 		// We wait for the last one to finish before turning off the progress indicator.
         fetchedFeeds.add(response.link);
         // check if we got all 3, then turn off progress indicator
@@ -125,23 +125,22 @@ public class RssFragment extends Fragment implements RssFeedFetchTask.OnRssFeedF
     }
 
     @Nullable
-    private TableRow createRssFeedItemView(RssFeedItem rssFeedItem) {
+    private TableRow createRssFeedItemTableRow(RssFeedItem rssFeedItem) {
         // avoid re-adding the same item
         if (shownFeedItems.contains(rssFeedItem.getGuid())) {
             return null;
         }
         shownFeedItems.add(rssFeedItem.getGuid());
 
-        TableRow newRow = new TableRow(getContext());
-        View rssItemView = getLayoutInflater().inflate(R.layout.item_rss_feed, null);
+        TableRow newRow = (TableRow) View.inflate(getContext(), R.layout.row_rss_feed, null);
 
-        final TextView rssItemTitleView = rssItemView.findViewById(R.id.rss_item_title);
+        final TextView rssItemTitleView = newRow.findViewById(R.id.rss_item_title);
         rssItemTitleView.setText(rssFeedItem.getTitle());
 
-        TextView rssItemDescriptionView = rssItemView.findViewById(R.id.rss_item_description);
+        TextView rssItemDescriptionView = newRow.findViewById(R.id.rss_item_description);
         rssItemDescriptionView.setText(rssFeedItem.getDescription());
 
-        rssItemView.setOnClickListener(new View.OnClickListener() {
+        newRow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String title = ((TextView)view.findViewById(R.id.rss_item_title)).getText().toString();
@@ -158,7 +157,6 @@ public class RssFragment extends Fragment implements RssFeedFetchTask.OnRssFeedF
             }
         });
 
-        newRow.addView(rssItemView);
         return newRow;
     }
 

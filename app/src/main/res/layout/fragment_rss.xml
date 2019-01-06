@@ -2,55 +2,58 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="match_parent">
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:background="#FF909090"
-        android:gravity="center"
-        android:text="Business"
-        android:textColor="#FFFFFFFF"
-        android:textSize="20dp" />
-
-    <ScrollView
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_weight="0.4"
-        android:scrollbars="none">
+        android:layout_height="match_parent"
+        android:layout_margin="5dp"
+        android:orientation="vertical"
+        android:padding="5dp">
 
-        <TableLayout
-            android:id="@+id/business_table"
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </TableLayout>
-    </ScrollView>
+            android:layout_height="30dp"
+            android:layout_margin="5dp"
+            android:background="#FF909090"
+            android:gravity="center"
+            android:text="@string/business"
+            android:textColor="#FFFFFFFF"
+            android:textSize="20dp" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:background="#FF909090"
-        android:gravity="center"
-        android:text="Entertaiment / Environment"
-        android:textColor="#FFFFFFFF"
-        android:textSize="20dp" />
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.4"
+            android:scrollbars="none">
 
-    <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_weight="0.4"
-        android:scrollbars="none">
+            <TableLayout
+                android:id="@+id/business_table"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></TableLayout>
+        </ScrollView>
 
-        <TableLayout
-            android:id="@+id/ent_env_table"
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </TableLayout>
-    </ScrollView>
-</LinearLayout>
+            android:layout_height="30dp"
+            android:layout_margin="5dp"
+            android:background="#FF909090"
+            android:gravity="center"
+            android:text="@string/entertaiment_environment"
+            android:textColor="#FFFFFFFF"
+            android:textSize="20dp" />
+
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.35"
+            android:scrollbars="none">
+
+            <TableLayout
+                android:id="@+id/ent_env_table"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></TableLayout>
+        </ScrollView>
+    </LinearLayout>
 
     <ProgressBar
         android:id="@+id/indeterminateBar"
